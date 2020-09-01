@@ -64,10 +64,8 @@ function buildCSV(columns, data, options) {
   const buildHead = columns => {
     return (
       columns
-        .reduce((soFar, column) => {
-          console.log(soFar, column);
-
-          return (
+        .reduce(
+          (soFar, column) =>
             column.download
               ? soFar +
                 '"' +
@@ -75,9 +73,8 @@ function buildCSV(columns, data, options) {
                 '"' +
                 options.downloadOptions.separator
               : soFar,
-            ''
-          );
-        })
+          '',
+        )
         .slice(0, -1) + '\r\n'
     );
   };
@@ -111,17 +108,22 @@ function buildCSV(columns, data, options) {
 function downloadCSV(csv, filename) {
   const blob = new Blob([csv], { type: 'text/csv' });
 
-  const dataURI = `data:text/csv;charset=utf-8,${csv}`;
+  /* taken from react-csv */
+  if (navigator && navigator.msSaveOrOpenBlob) {
+    navigator.msSaveOrOpenBlob(blob, filename);
+  } else {
+    const dataURI = `data:text/csv;charset=utf-8,${csv}`;
 
-  const URL = window.URL || window.webkitURL;
-  const downloadURI = typeof URL.createObjectURL === 'undefined' ? dataURI : URL.createObjectURL(blob);
+    const URL = window.URL || window.webkitURL;
+    const downloadURI = typeof URL.createObjectURL === 'undefined' ? dataURI : URL.createObjectURL(blob);
 
-  let link = document.createElement('a');
-  link.setAttribute('href', downloadURI);
-  link.setAttribute('download', filename);
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
+    let link = document.createElement('a');
+    link.setAttribute('href', downloadURI);
+    link.setAttribute('download', filename);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
 }
 
 function createCSVDownload(columns, data, options, downloadCSV) {
