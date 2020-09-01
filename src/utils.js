@@ -1,3 +1,5 @@
+import csvParser from 'csv-parse/lib/sync';
+
 function buildMap(rows) {
   return rows.reduce((accum, { dataIndex }) => {
     accum[dataIndex] = true;
@@ -106,10 +108,33 @@ function buildCSV(columns, data, options) {
 }
 
 function downloadCSV(csv, filename) {
-  const blob = new Blob([csv], { type: 'text/csv' });
+  /* MINE */
+  const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+  const fileExtension = '.xlsx';
 
-  /* taken from react-csv */
-  if (navigator && navigator.msSaveOrOpenBlob) {
+  const parsedCSV = csvParse(csv, {
+    columns: true,
+    delimiter: ',',
+    ltrim: true,
+    rtrim: true,
+  });
+
+  const wb = XLSX.utils.book_new();
+
+  console.log(parsedCSV);
+
+  /* const ws = XLSX.utils.json_to_sheet(parsedCSV);
+
+  XLSX.utils.book_append_sheet(wb, ws); */
+
+  /* const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+  const data = new Blob([excelBuffer], { type: fileType });
+  FileSaver.saveAs(data, filename + fileExtension); */
+
+  /* ORIGINAL */
+  /*const blob = new Blob([csv], { type: 'text/csv' });
+
+   if (navigator && navigator.msSaveOrOpenBlob) {
     navigator.msSaveOrOpenBlob(blob, filename);
   } else {
     const dataURI = `data:text/csv;charset=utf-8,${csv}`;
@@ -123,7 +148,7 @@ function downloadCSV(csv, filename) {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-  }
+  } */
 }
 
 function createCSVDownload(columns, data, options, downloadCSV) {
