@@ -64,8 +64,10 @@ function buildCSV(columns, data, options) {
   const buildHead = columns => {
     return (
       columns
-        .reduce(
-          (soFar, column) =>
+        .reduce((soFar, column) => {
+          console.log(soFar, column);
+
+          return (
             column.download
               ? soFar +
                 '"' +
@@ -73,8 +75,9 @@ function buildCSV(columns, data, options) {
                 '"' +
                 options.downloadOptions.separator
               : soFar,
-          '',
-        )
+            ''
+          );
+        })
         .slice(0, -1) + '\r\n'
     );
   };
