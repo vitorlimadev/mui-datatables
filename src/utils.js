@@ -1,5 +1,3 @@
-import csvParser from 'csv-parse/lib/sync';
-
 function buildMap(rows) {
   return rows.reduce((accum, { dataIndex }) => {
     accum[dataIndex] = true;
@@ -108,30 +106,7 @@ function buildCSV(columns, data, options) {
 }
 
 function downloadCSV(csv, filename) {
-  // Getting filetype and extentions required to create blob.
-  const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
-  const fileExtension = '.xlsx';
-
-  // Parsing CSV to JS array.
-  const parsedCSV = csvParser(csv, {
-    columns: true,
-    delimiter: ',',
-    ltrim: true,
-    rtrim: true,
-  });
-
-  // Creating workbook
-  const wb = XLSX.utils.book_new();
-
-  // Parsing JS array to Worksheet
-  const ws = XLSX.utils.json_to_sheet(parsedCSV);
-
-  // Appending WS to new WB.
-  XLSX.utils.book_append_sheet(wb, ws);
-
-  console.log(ws);
-
-  /* const blob = new Blob([csv], { type: 'text/csv' });
+  const blob = new Blob([csv], { type: 'text/csv' });
 
   const dataURI = `data:text/csv;charset=utf-8,${csv}`;
 
@@ -143,7 +118,7 @@ function downloadCSV(csv, filename) {
   link.setAttribute('download', filename);
   document.body.appendChild(link);
   link.click();
-  document.body.removeChild(link); */
+  document.body.removeChild(link);
 }
 
 function createCSVDownload(columns, data, options, downloadCSV) {
