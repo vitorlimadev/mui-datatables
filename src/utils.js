@@ -98,8 +98,9 @@ function buildCSV(columns, data, options) {
   };
   const CSVBody = buildBody(data);
 
-  // Modified to export a .XLSX compatible CSV.
-  const csv = (buildHead, buildBody, columns, data) => '\uFEFF' + buildHead(columns) + buildBody(data);
+  const csv = options.onDownload
+    ? options.onDownload(buildHead, buildBody, columns, data)
+    : `${CSVHead}${CSVBody}`.trim();
 
   return csv;
 }
