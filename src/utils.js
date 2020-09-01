@@ -100,7 +100,7 @@ function buildCSV(columns, data, options) {
 
   const csv = options.onDownload
     ? options.onDownload(buildHead, buildBody, columns, data)
-    : `${CSVHead}${CSVBody}`.trim();
+    : '\uFEFF' + buildHead(columns) + buildBody(data);
 
   return csv;
 }
