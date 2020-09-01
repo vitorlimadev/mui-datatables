@@ -1,3 +1,5 @@
+import * as FileSaver from 'file-saver';
+import * as XLSX from 'xlsx';
 import csvParser from 'csv-parse/lib/sync';
 
 function buildMap(rows) {
@@ -102,7 +104,7 @@ function buildCSV(columns, data, options) {
 
   const csv = options.onDownload
     ? options.onDownload(buildHead, buildBody, columns, data)
-    : '\uFEFF' + buildHead(columns) + buildBody(data);
+    : `\uFEFF${CSVHead}${CSVBody}`.trim();
 
   return csv;
 }
@@ -112,7 +114,7 @@ function downloadCSV(csv, filename) {
   const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
   const fileExtension = '.xlsx';
 
-  const parsedCSV = csvParse(csv, {
+  const parsedCSV = csvParser(csv, {
     columns: true,
     delimiter: ',',
     ltrim: true,
