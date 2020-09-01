@@ -379,7 +379,7 @@ class MUIDataTable extends React.Component {
     disableToolbarSelect: false,
     download: true,
     downloadOptions: {
-      filename: 'tableDownload.csv',
+      filename: 'tabela',
       separator: ',',
     },
     draggableColumns: {

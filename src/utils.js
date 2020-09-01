@@ -1,4 +1,5 @@
 import * as XLSX from 'xlsx';
+import * as FileSaver from 'file-saver';
 import csvParser from 'csv-parse/lib/sync';
 
 function buildMap(rows) {
@@ -122,15 +123,15 @@ function downloadCSV(csv, filename) {
 
   const wb = XLSX.utils.book_new();
 
-  console.log(parsedCSV);
+  const ws = XLSX.utils.json_to_sheet(parsedCSV);
 
-  /* const ws = XLSX.utils.json_to_sheet(parsedCSV);
+  XLSX.utils.book_append_sheet(wb, ws);
 
-  XLSX.utils.book_append_sheet(wb, ws); */
+  console.log(wb);
 
-  /* const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+  const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
   const data = new Blob([excelBuffer], { type: fileType });
-  FileSaver.saveAs(data, filename + fileExtension); */
+  FileSaver.saveAs(data, filename + fileExtension);
 
   /* ORIGINAL */
   /*const blob = new Blob([csv], { type: 'text/csv' });
